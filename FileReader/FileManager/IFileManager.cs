@@ -21,9 +21,10 @@ namespace FileReader
         /// </summary>
         /// <param name="pathFile">Source path of file</param>
         /// <param name="typeFile">Type of file: TXT or XML</param>
-        /// <param name="role"></param>
+        /// <param name="encrypt">True to encrypt the text</param>
+        /// <param name="role">Only active for XML files</param>
         /// <returns>The file as string</returns>
-        string ReadFile(string pathFile, string typeFile, Roles role = Roles.Viewer);
+        string ReadFile(string pathFile, string typeFile, bool encrypt = false, Roles role = Roles.Viewer);
     }
 
 }

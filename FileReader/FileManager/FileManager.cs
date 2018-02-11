@@ -34,19 +34,20 @@ namespace FileReader
         /// </summary>
         /// <param name="pathFile">Source path of file</param>
         /// <param name="typeFile">Type of file: TXT or XML</param>
-        /// <param name="role"></param>
+        /// <param name="encrypt">True to encrypt the text</param>
+        /// <param name="role">Only active for XML files</param>
         /// <returns>The file as string</returns>
-        public string ReadFile(string pathFile, string typeFile, Roles role = Roles.Viewer)
+        public string ReadFile(string pathFile, string typeFile, bool encrypt = false, Roles role = Roles.Viewer)
         {
             string text = string.Empty;
 
             switch(typeFile)
             {
                 case TXTFILE:
-                    text = this.ReadTextFile(pathFile);
+                    text = this.ReadTextFile(pathFile, encrypt);
                     break;
                 case XMLFILE:
-                    text = this.ReadXMLFile(pathFile, role);
+                    text = this.ReadXMLFile(pathFile, encrypt, role);
                     break;
                 default:
                     text = FILENOTSUPPORTED;
@@ -60,7 +61,7 @@ namespace FileReader
 
         #region Private methods
 
-        private string ReadTextFile(string pathFile, bool encrypt = false)
+        private string ReadTextFile(string pathFile, bool encrypt)
         {
             string text = string.Empty;
             string extension = Path.GetExtension(pathFile);
@@ -87,7 +88,7 @@ namespace FileReader
             return text;
         }
 
-        private string ReadXMLFile(string pathFile, Roles role)
+        private string ReadXMLFile(string pathFile, bool encrypt, Roles role)
         {
             string text = string.Empty;
 
@@ -100,6 +101,11 @@ namespace FileReader
                     var xml = XDocument.Load(pathFile);
 
                     text = xml.ToString();
+
+                    if (encrypt)
+                    {
+                        text = Security.Encrypt(text);
+                    }
                 }
                 else
                 {
