@@ -11,8 +11,17 @@ namespace FileReader
         /// <summary>
         /// Read a text file
         /// </summary>
-        /// <param name="pathFile">return the file as string</param>
-        /// <returns></returns>
+        /// <param name="pathFile">Source path of file</param>
+        /// <returns>The file as string</returns>
         string ReadFile(string pathFile);
+
+        /// <summary>
+        /// Read a text file or xml file
+        /// </summary>
+        /// <param name="pathFile">Source path of file</param>
+        /// <param name="typeFile">Type of file: TXT or XML</param>
+        /// <returns>The file as string</returns>
+        string ReadFile(string pathFile, string typeFile);
     }
+
 }

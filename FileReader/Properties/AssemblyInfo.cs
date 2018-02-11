@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
 [assembly: AssemblyTitle("FileReader")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Version 1: A user should be able to read a text file")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FileReader")]
