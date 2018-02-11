@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorize\Authorize.cs" />
+    <Compile Include="Authorize\Permissions.cs" />
+    <Compile Include="Authorize\Roles.cs" />
     <Compile Include="FileManager\FileManager.cs" />
     <Compile Include="FileManager\IFileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

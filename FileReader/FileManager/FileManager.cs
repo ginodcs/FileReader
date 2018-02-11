@@ -14,6 +14,7 @@ namespace FileReader
         public const string XMLFILE = "XML";
         private const string FILENOTSUPPORTED = "Cannot read this type of file. The files supported are TXT and XML.";
         private const string NOTMACH = "The type of file chosen does not match whith the file extension";
+        private const string NOTPERMISSION = "Don't have enough permissions";
 
         #region Publics methods
 
@@ -33,8 +34,9 @@ namespace FileReader
         /// </summary>
         /// <param name="pathFile">Source path of file</param>
         /// <param name="typeFile">Type of file: TXT or XML</param>
+        /// <param name="role"></param>
         /// <returns>The file as string</returns>
-        public string ReadFile(string pathFile, string typeFile)
+        public string ReadFile(string pathFile, string typeFile, Roles role = Roles.Viewer)
         {
             string text = string.Empty;
 
@@ -44,7 +46,7 @@ namespace FileReader
                     text = this.ReadTextFile(pathFile);
                     break;
                 case XMLFILE:
-                    text = this.ReadXMLFile(pathFile);
+                    text = this.ReadXMLFile(pathFile, role);
                     break;
                 default:
                     text = FILENOTSUPPORTED;
@@ -85,20 +87,28 @@ namespace FileReader
             return text;
         }
 
-        private string ReadXMLFile(string pathFile)
+        private string ReadXMLFile(string pathFile, Roles role)
         {
             string text = string.Empty;
-            string extension = Path.GetExtension(pathFile);
 
-            if (extension.IndexOf(XMLFILE, StringComparison.OrdinalIgnoreCase) >= 0)
+            if (Authorize.HasPermission(role, Permissions.ReadXMLFile))
             {
-                var xml = XDocument.Load(pathFile);
+                string extension = Path.GetExtension(pathFile);
 
-                text = xml.ToString();
+                if (extension.IndexOf(XMLFILE, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    var xml = XDocument.Load(pathFile);
+
+                    text = xml.ToString();
+                }
+                else
+                {
+                    text = NOTMACH;
+                }
             }
             else
             {
-                text = NOTMACH;
+                text = NOTPERMISSION;
             }
 
             return text;

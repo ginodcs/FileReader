@@ -21,8 +21,9 @@ namespace FileReader
         /// </summary>
         /// <param name="pathFile">Source path of file</param>
         /// <param name="typeFile">Type of file: TXT or XML</param>
+        /// <param name="role"></param>
         /// <returns>The file as string</returns>
-        string ReadFile(string pathFile, string typeFile);
+        string ReadFile(string pathFile, string typeFile, Roles role = Roles.Viewer);
     }
 
 }
