@@ -36,7 +36,7 @@ namespace FileReader
         /// <param name="pathFile">Source path of file</param>
         /// <param name="typeFile">Type of file: TXT,  XML or JSON</param>
         /// <param name="encrypt">True to encrypt the text</param>
-        /// <param name="role">Only active for XML files</param>
+        /// <param name="role"></param>
         /// <returns>The file as string</returns>
         public string ReadFile(string pathFile, string typeFile, bool encrypt = false, Roles role = Roles.Viewer)
         {
@@ -51,7 +51,7 @@ namespace FileReader
                     text = this.ReadXMLFile(pathFile, encrypt, role);
                     break;
                 case JSONFILE:
-                    text = this.ReadJSONFile(pathFile, encrypt);
+                    text = this.ReadJSONFile(pathFile, encrypt, role);
                     break;
                 default:
                     text = FILENOTSUPPORTED;
@@ -131,23 +131,30 @@ namespace FileReader
             return text;
         }
 
-        private string ReadJSONFile(string pathFile, bool encrypt)
+        private string ReadJSONFile(string pathFile, bool encrypt, Roles role)
         {
             string text = string.Empty;
             string extension = Path.GetExtension(pathFile);
 
-            if (extension.IndexOf(JSONFILE, StringComparison.OrdinalIgnoreCase) >= 0)
+            if (Authorize.HasPermission(role, Permissions.ReadXMLFile))
             {
-                text = File.ReadAllText(pathFile);
-
-                if (encrypt)
+                if (extension.IndexOf(JSONFILE, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    text = Security.Encrypt(text);
+                    text = File.ReadAllText(pathFile);
+
+                    if (encrypt)
+                    {
+                        text = Security.Encrypt(text);
+                    }
+                }
+                else
+                {
+                    text = NOTMACH;
                 }
             }
             else
             {
-                text = NOTMACH;
+                text = NOTPERMISSION;
             }
 
             return text;
