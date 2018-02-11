@@ -21,10 +21,11 @@ namespace FileReader
         /// Read a text file
         /// </summary>
         /// <param name="pathFile">Source path of file</param>
+        /// <param name="encrypt">True to encrypt the text</param>
         /// <returns>The file as string</returns>
-        public string ReadFile(string pathFile)
+        public string ReadFile(string pathFile, bool encrypt = false)
         {
-           return  this.ReadTextFile(pathFile);
+           return  this.ReadTextFile(pathFile, encrypt);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace FileReader
 
         #region Private methods
 
-        private string ReadTextFile(string pathFile)
+        private string ReadTextFile(string pathFile, bool encrypt = false)
         {
             string text = string.Empty;
             string extension = Path.GetExtension(pathFile);
@@ -69,14 +70,17 @@ namespace FileReader
                 using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
                 {
                     text = streamReader.ReadToEnd();
+
+                    if (encrypt)
+                    {
+                        text = Security.Encrypt(text);
+                    } 
                 }
             }
             else 
             {
                 text = NOTMACH;
             }
-
-
 
             return text;
         }
