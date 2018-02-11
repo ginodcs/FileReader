@@ -51,7 +51,7 @@ namespace FileReader
                     text = this.ReadXMLFile(pathFile, encrypt, role);
                     break;
                 case JSONFILE:
-                    text = this.ReadJSONFile(pathFile);
+                    text = this.ReadJSONFile(pathFile, encrypt);
                     break;
                 default:
                     text = FILENOTSUPPORTED;
@@ -131,7 +131,7 @@ namespace FileReader
             return text;
         }
 
-        private string ReadJSONFile(string pathFile)
+        private string ReadJSONFile(string pathFile, bool encrypt)
         {
             string text = string.Empty;
             string extension = Path.GetExtension(pathFile);
@@ -139,6 +139,11 @@ namespace FileReader
             if (extension.IndexOf(JSONFILE, StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 text = File.ReadAllText(pathFile);
+
+                if (encrypt)
+                {
+                    text = Security.Encrypt(text);
+                }
             }
             else
             {
