@@ -21,7 +21,7 @@ namespace FileReader
         /// Read a text file or xml file
         /// </summary>
         /// <param name="pathFile">Source path of file</param>
-        /// <param name="typeFile">Type of file: TXT or XML</param>
+        /// <param name="typeFile">Type of file: TXT, XML,  JSON</param>
         /// <param name="encrypt">True to encrypt the text</param>
         /// <param name="role">Only active for XML, TXT files</param>
         /// <returns>The file as string</returns>

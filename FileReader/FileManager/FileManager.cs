@@ -34,7 +34,7 @@ namespace FileReader
         /// Read a text file or xml file
         /// </summary>
         /// <param name="pathFile">Source path of file</param>
-        /// <param name="typeFile">Type of file: TXT or XML</param>
+        /// <param name="typeFile">Type of file: TXT,  XML or JSON</param>
         /// <param name="encrypt">True to encrypt the text</param>
         /// <param name="role">Only active for XML files</param>
         /// <returns>The file as string</returns>
@@ -136,7 +136,7 @@ namespace FileReader
             string text = string.Empty;
             string extension = Path.GetExtension(pathFile);
 
-            if (extension.IndexOf(TXTFILE, StringComparison.OrdinalIgnoreCase) >= 0)
+            if (extension.IndexOf(JSONFILE, StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 text = File.ReadAllText(pathFile);
             }
