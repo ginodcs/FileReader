@@ -12,6 +12,7 @@ namespace FileReader
     {
         public const string TXTFILE = "TXT";
         public const string XMLFILE = "XML";
+        public const string JSONFILE = "JSON";
         private const string FILENOTSUPPORTED = "Cannot read this type of file. The files supported are TXT and XML.";
         private const string NOTMACH = "The type of file chosen does not match whith the file extension";
         private const string NOTPERMISSION = "Don't have enough permissions";
@@ -26,7 +27,7 @@ namespace FileReader
         /// <returns>The file as string</returns>
         public string ReadFile(string pathFile, bool encrypt = false, Roles role = Roles.Viewer)
         {
-           return  this.ReadTextFile(pathFile, encrypt, role);
+            return this.ReadTextFile(pathFile, encrypt, role);
         }
 
         /// <summary>
@@ -41,13 +42,16 @@ namespace FileReader
         {
             string text = string.Empty;
 
-            switch(typeFile)
+            switch (typeFile)
             {
                 case TXTFILE:
                     text = this.ReadTextFile(pathFile, encrypt, role);
                     break;
                 case XMLFILE:
                     text = this.ReadXMLFile(pathFile, encrypt, role);
+                    break;
+                case JSONFILE:
+                    text = this.ReadJSONFile(pathFile);
                     break;
                 default:
                     text = FILENOTSUPPORTED;
@@ -122,6 +126,23 @@ namespace FileReader
             else
             {
                 text = NOTPERMISSION;
+            }
+
+            return text;
+        }
+
+        private string ReadJSONFile(string pathFile)
+        {
+            string text = string.Empty;
+            string extension = Path.GetExtension(pathFile);
+
+            if (extension.IndexOf(TXTFILE, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                text = File.ReadAllText(pathFile);
+            }
+            else
+            {
+                text = NOTMACH;
             }
 
             return text;

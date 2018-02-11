@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
 [assembly: AssemblyTitle("FileReader")]
-[assembly: AssemblyDescription("Version 4: A user should be able to read XML files in role based security system.")]
+[assembly: AssemblyDescription("Version 6: A user should be able to read text files in role based security system.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FileReader")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Puede especificar todos los valores o usar los valores predeterminados de número de compilación y de revisión 
 // mediante el carácter '*', como se muestra a continuación:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.0.0.0")]
+[assembly: AssemblyVersion("6.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
