@@ -6,6 +6,8 @@ namespace FileReader
         ReadTextFile,
         ReadXMLFile,
         WriteTextFile,
-        WriteXMLFile
+        WriteXMLFile,
+        ReadJSONFile,
+        WriteJSONFile
     }
 }

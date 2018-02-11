@@ -27,7 +27,7 @@ namespace FileReader
         /// <returns>The file as string</returns>
         public string ReadFile(string pathFile, bool encrypt = false, Roles role = Roles.Viewer)
         {
-            return this.ReadTextFile(pathFile, encrypt, role);
+            return ReadFile(pathFile, TXTFILE, encrypt, role);
         }
 
         /// <summary>
@@ -41,115 +41,24 @@ namespace FileReader
         public string ReadFile(string pathFile, string typeFile, bool encrypt = false, Roles role = Roles.Viewer)
         {
             string text = string.Empty;
-
-            switch (typeFile)
-            {
-                case TXTFILE:
-                    text = this.ReadTextFile(pathFile, encrypt, role);
-                    break;
-                case XMLFILE:
-                    text = this.ReadXMLFile(pathFile, encrypt, role);
-                    break;
-                case JSONFILE:
-                    text = this.ReadJSONFile(pathFile, encrypt, role);
-                    break;
-                default:
-                    text = FILENOTSUPPORTED;
-                    break;
-            }
-
-            return text;
-        }
-
-        #endregion
-
-        #region Private methods
-
-        private string ReadTextFile(string pathFile, bool encrypt, Roles role)
-        {
-            string text = string.Empty;
             string extension = Path.GetExtension(pathFile);
 
-            if (Authorize.HasPermission(role, Permissions.ReadXMLFile))
+            if (extension.IndexOf(typeFile, StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                if (extension.IndexOf(TXTFILE, StringComparison.OrdinalIgnoreCase) >= 0)
+                switch (typeFile)
                 {
-                    var fileStream = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
-
-                    using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
-                    {
-                        text = streamReader.ReadToEnd();
-
-                        if (encrypt)
-                        {
-                            text = Security.Encrypt(text);
-                        }
-                    }
-                }
-                else
-                {
-                    text = NOTMACH;
-                }
-            }
-            else
-            {
-                text = NOTPERMISSION;
-            }
-
-            return text;
-        }
-
-        private string ReadXMLFile(string pathFile, bool encrypt, Roles role)
-        {
-            string text = string.Empty;
-
-            if (Authorize.HasPermission(role, Permissions.ReadXMLFile))
-            {
-                string extension = Path.GetExtension(pathFile);
-
-                if (extension.IndexOf(XMLFILE, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    var xml = XDocument.Load(pathFile);
-
-                    text = xml.ToString();
-
-                    if (encrypt)
-                    {
-                        text = Security.Encrypt(text);
-                    }
-                }
-                else
-                {
-                    text = NOTMACH;
-                }
-            }
-            else
-            {
-                text = NOTPERMISSION;
-            }
-
-            return text;
-        }
-
-        private string ReadJSONFile(string pathFile, bool encrypt, Roles role)
-        {
-            string text = string.Empty;
-            string extension = Path.GetExtension(pathFile);
-
-            if (Authorize.HasPermission(role, Permissions.ReadXMLFile))
-            {
-                if (extension.IndexOf(JSONFILE, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    text = File.ReadAllText(pathFile);
-
-                    if (encrypt)
-                    {
-                        text = Security.Encrypt(text);
-                    }
-                }
-                else
-                {
-                    text = NOTMACH;
+                    case TXTFILE:
+                        text = this.ReadFile(pathFile, encrypt, role, Permissions.ReadTextFile);
+                        break;
+                    case XMLFILE:
+                        text = this.ReadFile(pathFile, encrypt, role, Permissions.ReadXMLFile);
+                        break;
+                    case JSONFILE:
+                        text = this.ReadFile(pathFile, encrypt, role, Permissions.ReadJSONFile);
+                        break;
+                    default:
+                        text = FILENOTSUPPORTED;
+                        break;
                 }
             }
             else
@@ -162,6 +71,30 @@ namespace FileReader
 
         #endregion
 
+        #region Private methods
+
+        private string ReadFile(string pathFile, bool encrypt, Roles role, Permissions permission)
+        {
+            string text = string.Empty;
+
+            if (Authorize.HasPermission(role, permission))
+            {
+                text = text = File.ReadAllText(pathFile);
+
+                if (encrypt)
+                {
+                    text = Security.Encrypt(text);
+                }
+            }
+            else
+            {
+                text = NOTPERMISSION;
+            }
+
+            return text;
+        }
+
+        #endregion
 
     }
 }
