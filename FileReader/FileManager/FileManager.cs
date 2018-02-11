@@ -24,9 +24,9 @@ namespace FileReader
         /// <param name="pathFile">Source path of file</param>
         /// <param name="encrypt">True to encrypt the text</param>
         /// <returns>The file as string</returns>
-        public string ReadFile(string pathFile, bool encrypt = false)
+        public string ReadFile(string pathFile, bool encrypt = false, Roles role = Roles.Viewer)
         {
-           return  this.ReadTextFile(pathFile, encrypt);
+           return  this.ReadTextFile(pathFile, encrypt, role);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace FileReader
             switch(typeFile)
             {
                 case TXTFILE:
-                    text = this.ReadTextFile(pathFile, encrypt);
+                    text = this.ReadTextFile(pathFile, encrypt, role);
                     break;
                 case XMLFILE:
                     text = this.ReadXMLFile(pathFile, encrypt, role);
@@ -61,28 +61,35 @@ namespace FileReader
 
         #region Private methods
 
-        private string ReadTextFile(string pathFile, bool encrypt)
+        private string ReadTextFile(string pathFile, bool encrypt, Roles role)
         {
             string text = string.Empty;
             string extension = Path.GetExtension(pathFile);
 
-            if(extension.IndexOf(TXTFILE, StringComparison.OrdinalIgnoreCase) >= 0)
+            if (Authorize.HasPermission(role, Permissions.ReadXMLFile))
             {
-                var fileStream = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
-
-                using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+                if (extension.IndexOf(TXTFILE, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    text = streamReader.ReadToEnd();
+                    var fileStream = new FileStream(pathFile, FileMode.Open, FileAccess.Read);
 
-                    if (encrypt)
+                    using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
                     {
-                        text = Security.Encrypt(text);
-                    } 
+                        text = streamReader.ReadToEnd();
+
+                        if (encrypt)
+                        {
+                            text = Security.Encrypt(text);
+                        }
+                    }
+                }
+                else
+                {
+                    text = NOTMACH;
                 }
             }
-            else 
+            else
             {
-                text = NOTMACH;
+                text = NOTPERMISSION;
             }
 
             return text;
